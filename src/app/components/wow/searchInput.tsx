@@ -1,18 +1,21 @@
 "use client";
 
 import React, { Key, useEffect, useState } from "react";
-import {Selection} from "@react-types/shared";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Input, RadioGroup, Radio } from "@nextui-org/react";
-import { RealmsDTO } from "../clients/realmsClient";
-import { ExpansionInstance, getCharacterDungeons, getCharacterRaids, getCharacters, WowCharacter } from "../clients/characterClient";
-import CharacterSheet from "./characterData";
+import { Selection } from "@react-types/shared";
+import { RealmsDTO } from "../../clients/realmsClient";
+import { ExpansionInstance, getCharacterDungeons, getCharacterRaids, getCharacters, WowCharacter } from "../../clients/characterClient";
+import CharacterSheet, { CharacterDataDTO } from "./characterData";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
+import { Button } from "@nextui-org/button";
+import {Input} from "@nextui-org/input";
 
-export default function SearchInput( {realms} : {realms: RealmsDTO[] } ) {  
+export default function SearchInput({ realms }: { realms: RealmsDTO[] }) {
 
     const [selectedRealm, setselectedRealm] = useState<string>();
     const [selectedCharacterName, setselectedCharacterName] = useState<string>();
-    const [selectedCharacter, setselectedCharacter] = useState<WowCharacter>();
-    const [characterRaids, setcharacterRaids] = useState<ExpansionInstance[]>();
+    const [selectedCharacter, setselectedCharacter] = useState<CharacterDataDTO>();
+    // const [selectedCharacter, setselectedCharacter] = useState<WowCharacter>();
+    // const [characterRaids, setcharacterRaids] = useState<ExpansionInstance[]>();
 
 
     const getCharacterData = () => {
@@ -20,15 +23,18 @@ export default function SearchInput( {realms} : {realms: RealmsDTO[] } ) {
             const characterData = getCharacters(selectedRealm, selectedCharacterName?.toLowerCase());
             const raidsData = getCharacterRaids(selectedRealm, selectedCharacterName?.toLowerCase());
             const dungeonsData = getCharacterDungeons(selectedRealm, selectedCharacterName?.toLowerCase());
- 
+
             const [character, raids, dungeons] = await Promise.all([characterData, raidsData, dungeonsData]);
 
             if (!character) {
                 console.log(Error);
             }
             else {
-                setselectedCharacter(character);
-                setcharacterRaids(raids);
+                const characterData: CharacterDataDTO = {
+                    character: character,
+                    raids: raids,
+                };
+                setselectedCharacter(characterData);
             }
         }
         fetchData();
@@ -36,8 +42,8 @@ export default function SearchInput( {realms} : {realms: RealmsDTO[] } ) {
 
     return (
         <div className="flex flex-col gap-3 content-center" >
-            <Dropdown className="w-1/6"> 
-                <DropdownTrigger className="w-1/6">
+            <Dropdown className="w-1/3">
+                <DropdownTrigger className="w-1/3">
                     <Button
                         variant="bordered"
                         className="capitalize"
@@ -71,14 +77,14 @@ export default function SearchInput( {realms} : {realms: RealmsDTO[] } ) {
                 value={selectedCharacterName}
                 onValueChange={setselectedCharacterName}
                 // defaultValue="Zugchini"
-                className="w-1/6"
+                className="w-1/3"
             />
 
-            <Button className="w-1/6" color="warning" variant="solid" onClick={getCharacterData}>
+            <Button className="w-1/3" color="warning" variant="solid" onClick={getCharacterData}>
                 Search
             </Button>
 
-            <CharacterSheet character={selectedCharacter} raids={characterRaids}/>
+            {selectedCharacter ? <CharacterSheet characterDTO={selectedCharacter} /> : <div></div>}
         </div>
 
     );

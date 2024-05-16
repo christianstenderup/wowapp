@@ -1,5 +1,3 @@
-'use server'
-
 import { getAccessToken } from "./tokenClient";
 
 export async function getCharacters(realmName: string | undefined, characterName: string | undefined) {

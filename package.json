@@ -6,14 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "proxy": "mkcert -install && mkcert localhost && local-ssl-proxy --source 3010 --target 3000 --cert localhost.pem --key localhost-key.pem"
   },
   "dependencies": {
-    "@nextui-org/button": "^2.0.31",
-    "@nextui-org/react": "^2.3.6",
+    "@nextui-org/dropdown": "^2.1.23",
+    "@nextui-org/input": "^2.1.21",
+    "@nextui-org/radio": "^2.0.28",
     "@nextui-org/system": "^2.1.2",
     "@nextui-org/theme": "^2.2.3",
+    "@storyblok/react": "^3.0.10",
     "framer-motion": "^11.1.7",
+    "local-ssl-proxy": "^2.0.5",
     "next": "14.2.3",
     "next-auth": "^4.24.7",
     "react": "^18",

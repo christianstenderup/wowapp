@@ -1,5 +1,3 @@
-'use server'
-
 import { getAccessToken } from "./tokenClient";
 
 const BASE_URL = 'https://eu.api.blizzard.com/data/wow/realm/index?region=EU&namespace=dynamic-EU&locale=en_GB';

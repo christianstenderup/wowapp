@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { WowCharacter, ExpansionInstance } from "../clients/characterClient";
+import { WowCharacter, ExpansionInstance } from "../../clients/characterClient";
 
-export default function CharacterSheet({ character, raids }: { character: WowCharacter | undefined, raids: ExpansionInstance[] | undefined }) {
-
-    const currentSeason = raids?.find((raid) => raid.expansion.id == 505);
+export default function CharacterSheet( {characterDTO} : { characterDTO: CharacterDataDTO} ) {
+    
+    const currentSeason = characterDTO?.raids?.find((raid) => raid.expansion.id == 505);
     const currentInstances = currentSeason?.instances?.find((instance) => instance.instance.id == 1200);
 
     const completion = currentInstances?.modes.find((mode) => mode.difficulty.type.toLowerCase() == "normal");
@@ -13,9 +13,9 @@ export default function CharacterSheet({ character, raids }: { character: WowCha
     return (
         <div className="flex flex-col gap-3 content-center" >
             <div className="flex flex-col gap-3 content-center" >
-                <span>Character: {character?.name}</span>
-                <span>Average ILevel: {character?.average_item_level}</span>
-                <span>Active spec: {character?.active_spec?.name.toString()}</span>
+                <span>Character: {characterDTO.character?.name}</span>
+                <span>Average ILevel: {characterDTO.character?.average_item_level}</span>
+                <span>Active spec: {characterDTO.character?.active_spec?.name.toString()}</span>
             </div>
 
             <div>
@@ -35,3 +35,9 @@ export default function CharacterSheet({ character, raids }: { character: WowCha
 
     );
 }
+
+export interface CharacterDataDTO {
+    character: WowCharacter | undefined;
+    raids: ExpansionInstance[] | undefined;
+  }
+  
